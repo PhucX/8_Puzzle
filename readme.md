@@ -1,4 +1,4 @@
-# Báo cáo Đồ án: Giải đố 8-Puzzle với các Thuật Toán Tìm Kiếm
+# Báo cáo đồ án cá nhân: Giải đố 8-Puzzle
 
 ## 1. Mục tiêu
 
