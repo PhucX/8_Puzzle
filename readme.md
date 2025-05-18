@@ -40,13 +40,21 @@ Bài toán 8-puzzle, khi được tiếp cận bằng các thuật toán tìm ki
 
 #### 2.2.2. Hình ảnh GIF minh họa hoạt động
 * BFS
+  
 ![BFS](Gif/Bfs.gif)
+
 * UCS
+  
 ![UCS](Gif/Ucs.gif)
+
 * DFS
+  
 ![DFS](Gif/Dfs.gif)
+
 * IDFS
+  
 ![IDFS](Gif/idfs.gif)
+
 #### 2.2.3. Hình ảnh so sánh hiệu suất của các thuật toán
 * #### 2.2.4. Một vài nhận xét về hiệu suất
 * **BFS:**
@@ -90,11 +98,17 @@ Việc sử dụng heuristic giúp các thuật toán này "thông minh" hơn tr
 
 #### 2.3.3. Hình ảnh GIF minh họa hoạt động
 * Greedy Search (Tìm kiếm tham lam)
+  
 ![Greedy](Gif/Greedy.gif)
+
 * A\*
+  
 ![A*](Gif/a_start.gif)
+
 * Iterative Deepening A\* (IDA\*)
+  
 ![IDA*](Gif/IDA_start.gif)
+
 #### 2.3.4. Hình ảnh so sánh hiệu suất của các thuật toán
 *
 #### 2.3.5. Một vài nhận xét về hiệu suất
@@ -127,7 +141,7 @@ Các thuật toán tìm kiếm cục bộ hoạt động theo một cách khác 
 * Các thuật toán này thường không lưu trữ đường đi mà chỉ quan tâm đến trạng thái hiện tại và các trạng thái láng giềng của nó.
 * Giải pháp (solution) trong tìm kiếm cục bộ thường là trạng thái cuối cùng mà thuật toán dừng lại, hy vọng đó là trạng thái đích hoặc một trạng thái rất gần với trạng thái đích.
 
-Đối với 8-puzzle, hàm đánh giá có thể là giá trị âm của heuristic (ví dụ: $-h(n)$), và mục tiêu là tối đa hóa giá trị này (tương đương tối thiểu hóa $h(n)$).
+Đối với 8-puzzle, hàm đánh giá có thể là giá trị âm của heuristic ( ví dụ: $h(n)$ ), và mục tiêu là tối đa hóa giá trị này (tương đương tối thiểu hóa $h(n)$ ).
 
 #### 2.4.2. Các thuật toán triển khai trong nhóm
 * Hill Climbing (Leo đồi):
@@ -140,17 +154,29 @@ Các thuật toán tìm kiếm cục bộ hoạt động theo một cách khác 
 
 #### 2.4.3. Hình ảnh GIF minh họa hoạt động
 * Simple Hill Climbing (Leo đồi đơn giản)
+  
 ![Leo đồi đơn giản](Gif/Leo_Doi_Don_Gian.gif)
+
 * Steepest-Ascent Hill Climbing (Leo đồi dốc nhất)
+  
 ![Leo đồi](Gif/leo_doi.gif)
+
 * Stochastic Hill Climbing (Leo đồi ngẫu nhiên)
+  
 ![Leo đồi ngẫu nhiên](Gif/leo_doi_Ngau_Nhien.gif)
+
 * Simulated Annealing (Luyện mô phỏng / Ủ tôi)
+  
 ![SA](Gif/SA.gif)
+
 * Genetic Algorithms (Thuật toán di truyền)
+  
 ![Di truyền](Gif/Di_Truyền.gif)
+
 * Beam Search (Tìm kiếm chùm tia)
+  
 ![Beam](Gif/Beam.gif)
+
 #### 2.4.4. Hình ảnh so sánh hiệu suất của các thuật toán
 * #### 2.4.5. Một vài nhận xét về hiệu suất
 * **Hill Climbing (các biến thể):**
@@ -190,11 +216,17 @@ Nhóm này bao gồm các thuật toán được thiết kế để giải quy�
 
 #### 2.5.3. Hình ảnh GIF minh họa hoạt động
 * AND-OR Search (Tìm kiếm trên cây AND-OR)
+  
 ![AND/OR](Gif/And_or.gif)
+
 * Trust-Based Search (Tìm kiếm dựa trên niềm tin)
+  
 ![Niềm tin](Gif/Niem_Tin.gif)
+
 * Trust-Based Partial Search (Tìm kiếm dựa trên niềm tin, tập trung vào mục tiêu con)
+  
 ![Nhìn thấy một phần](Gif/Nhin_Thay_1_Phan.gif)
+
 #### 2.5.4. Hình ảnh so sánh hiệu suất của các thuật toán
 * #### 2.5.5. Một vài nhận xét về hiệu suất
 * **AND-OR Search:**
@@ -217,10 +249,10 @@ Mặc dù bài toán 8-puzzle thường được giải bằng các thuật toá
 * **Miền giá trị cho biến (Domains):** Miền giá trị cho mỗi biến $X_i$ là tập các số $\{0, 1, ..., 8\}$.
 * **Ràng buộc (Constraints):**
     * **Ràng buộc AllDifferent:** Tất cả các biến $X_i$ phải có giá trị khác nhau (mỗi số từ 0 đến 8 chỉ xuất hiện một lần).
-    * **Ràng buộc trạng thái đích (Goal Constraints):** Nếu mục tiêu là tìm một cấu hình trạng thái đích cụ thể, thì các ràng buộc sẽ là $X_1 = \text{value_at_pos_1_in_goal}, X_2 = \text{value_at_pos_2_in_goal}$, v.v.
+    * **Ràng buộc trạng thái đích (Goal Constraints):** Nếu mục tiêu là tìm một cấu hình trạng thái đích cụ thể, v.v.
 * **Giải pháp (Solution):** Một phép gán giá trị hoàn chỉnh cho tất cả các biến sao cho tất cả các ràng buộc đều được thỏa mãn. Trong trường hợp 8-puzzle, một giải pháp CSP sẽ là một cấu hình bảng hợp lệ.
 
-*Lưu ý:* Đoạn code `constraint_satisfaction` của bạn dường như không giải quyết 8-puzzle như một CSP tĩnh để tìm *một* cấu hình. Thay vào đó, nó có vẻ sử dụng các kỹ thuật CSP (như AC-3 và MRV heuristic) trong một *khuôn khổ tìm kiếm đường đi* để tìm một chuỗi các nước đi. Hàm `backtracking_search` thì gần với CSP truyền thống hơn, cố gắng tìm một chuỗi các nước đi (assignment) để đạt trạng thái đích.
+*Lưu ý:* Đoạn code `constraint_satisfaction` không giải quyết 8-puzzle như một CSP tĩnh để tìm *một* cấu hình. Thay vào đó, nó sử dụng các kỹ thuật CSP (như AC-3 và MRV heuristic) trong một *khuôn khổ tìm kiếm đường đi* để tìm một chuỗi các nước đi.
 
 #### 2.6.2. Các thuật toán/kỹ thuật triển khai trong nhóm
 * Backtracking Search (Tìm kiếm quay lui) - Triển khai để tìm một chuỗi các nước đi.
@@ -228,13 +260,17 @@ Mặc dù bài toán 8-puzzle thường được giải bằng các thuật toá
 
 #### 2.6.3. Hình ảnh GIF minh họa hoạt động
 * Backtracking Search (Tìm kiếm quay lui)
+  
 ![Backtracking](Gif/Backtracking.gif)
+
 * AC-3 (Arc Consistency Algorithm #3)
+  
 ![AC-3](Gif/ac3.gif)
+
 #### 2.6.4. Hình ảnh so sánh hiệu suất của các thuật toán
 * #### 2.6.5. Một vài nhận xét về hiệu suất
 * **Backtracking Search (cho tìm đường đi):**
-    * Hàm `backtracking_search` trong code của bạn là một thuật toán tìm kiếm sâu có hệ thống, thử các nước đi và quay lui nếu không dẫn đến đích hoặc vượt quá giới hạn độ sâu.
+    * Hàm `backtracking_search`  là một thuật toán tìm kiếm sâu có hệ thống, thử các nước đi và quay lui nếu không dẫn đến đích hoặc vượt quá giới hạn độ sâu.
     * Việc sử dụng heuristic (Manhattan distance) để sắp xếp thứ tự thử các nước đi (`ORDER-DOMAIN-VALUES`) giúp cải thiện hiệu suất so với backtracking thuần túy.
     * Hiệu quả phụ thuộc vào chất lượng heuristic và giới hạn độ sâu. Có thể tìm ra giải pháp nhưng không đảm bảo tối ưu về số bước.
 * **`constraint_satisfaction` với AC-3 và MRV:**
@@ -251,27 +287,29 @@ Trong cách tiếp cận Học tăng cường (RL), bài toán 8-puzzle được
 * **Trạng thái (State $S$):** Mỗi cấu hình của 8-puzzle là một trạng thái.
 * **Hành động (Action $A$):** Các nước đi hợp lệ của ô trống (lên, xuống, trái, phải).
 * **Hàm chuyển tiếp (Transition $P(S'|S,A)$):** Xác suất chuyển từ trạng thái $S$ sang trạng thái $S'$ khi thực hiện hành động $A$. Trong 8-puzzle, hàm chuyển tiếp là tất định (deterministic).
-* **Phần thưởng (Reward $R$):** Tác nhân nhận được phần thưởng sau mỗi hành động. Ví dụ:
+* **Phần thưởng (Reward):** Tác nhân nhận được phần thưởng sau mỗi hành động. Ví dụ:
     * Một phần thưởng lớn (ví dụ: +100) khi đạt trạng thái đích.
     * Một phần thưởng nhỏ, dương (ví dụ: +1) cho mỗi bước đi làm giảm khoảng cách đến đích (theo heuristic).
     * Một hình phạt nhỏ (ví dụ: -0.01 hoặc -1) cho mỗi bước đi không tiến gần hơn hoặc đi vào trạng thái đã thăm.
-* **Chính sách (Policy $\pi(A|S)$):** Là chiến lược của tác nhân, xác định hành động nào sẽ được chọn ở mỗi trạng thái. Mục tiêu của RL là học được một chính sách tối ưu $\pi^*$ để tối đa hóa tổng phần thưởng kỳ vọng tích lũy theo thời gian.
-* **Giải pháp (Solution):** Trong RL, giải pháp là chính sách tối ưu $\pi^*$. Sau khi học được chính sách này, tác nhân có thể sử dụng nó để tìm đường đi từ trạng thái ban đầu đến trạng thái đích một cách hiệu quả.
+* **Chính sách (Policy):** Là chiến lược của tác nhân, xác định hành động nào sẽ được chọn ở mỗi trạng thái. Mục tiêu của RL là học được một chính sách tối ưu $\pi^*$ để tối đa hóa tổng phần thưởng kỳ vọng tích lũy theo thời gian.
+* **Giải pháp (Solution):** Trong RL, giải pháp là chính sách tối ưu . Sau khi học được chính sách này, tác nhân có thể sử dụng nó để tìm đường đi từ trạng thái ban đầu đến trạng thái đích một cách hiệu quả.
 
 #### 2.7.2. Thuật toán triển khai trong nhóm
 * Q-Learning
 
 #### 2.7.3. Hình ảnh GIF minh họa hoạt động
 * Q-Learning
+  
 ![Q-learning](Gif/Q_learning.gif)
+
 #### 2.7.4. Hình ảnh so sánh hiệu suất của các thuật toán
 * * #### 2.7.5. Một vài nhận xét về hiệu suất
 * **Q-Learning:**
-    * Là một thuật toán học tăng cường không dựa trên mô hình (model-free), off-policy. Nó học một hàm giá trị hành động (Q-value, $Q(S,A)$) để ước lượng "chất lượng" (tổng phần thưởng kỳ vọng trong tương lai) của việc thực hiện hành động $A$ trong trạng thái $S$ và sau đó tuân theo chính sách tối ưu.
+    * Là một thuật toán học tăng cường không dựa trên mô hình (model-free), off-policy. Nó học một hàm giá trị hành động (Q-value, $Q(S,A)$ ) để ước lượng "chất lượng" (tổng phần thưởng kỳ vọng trong tương lai) của việc thực hiện hành động $A$ trong trạng thái $S$ và sau đó tuân theo chính sách tối ưu.
     * **Giai đoạn huấn luyện:**
         * Yêu cầu nhiều episodes (lượt chơi thử) để khám phá không gian trạng thái-hành động và cập nhật bảng Q.
         * Sử dụng chiến lược khám phá (ví dụ: epsilon-greedy - với xác suất epsilon thì chọn hành động ngẫu nhiên, còn lại thì chọn hành động tốt nhất theo bảng Q hiện tại) để cân bằng giữa việc khám phá (exploration) và khai thác (exploitation). Epsilon thường giảm dần theo thời gian.
-        * Các tham số như tỷ lệ học (learning rate $\alpha$), yếu tố chiết khấu (discount factor $\gamma$), và lịch trình epsilon ảnh hưởng lớn đến tốc độ hội tụ và chất lượng của bảng Q học được.
+        * Các tham số như tỷ lệ học (learning rate $\alpha$ ), yếu tố chiết khấu (discount factor $\gamma$ ), và lịch trình epsilon ảnh hưởng lớn đến tốc độ hội tụ và chất lượng của bảng Q học được.
         * Đối với 8-puzzle, không gian trạng thái là khá lớn (362,880 trạng thái), nên việc huấn luyện một bảng Q đầy đủ có thể tốn thời gian và bộ nhớ.
     * **Giai đoạn thực thi (sau khi học):**
         * Khi bảng Q đã hội tụ, việc tìm đường đi tối ưu (theo những gì đã học) từ một trạng thái ban đầu rất nhanh: chỉ cần ở mỗi trạng thái, chọn hành động có giá trị Q cao nhất.
