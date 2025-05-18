@@ -268,45 +268,69 @@ Nhóm này bao gồm các thuật toán được thiết kế để giải quy�
 
 ### 2.6. Các thuật toán Tìm kiếm trong môi trường có ràng buộc (Constraint Satisfaction Problems - CSPs)
 
-#### 2.6.1. Mô hình hóa 8-Puzzle như một CSP
-Mặc dù bài toán 8-puzzle thường được giải bằng các thuật toán tìm kiếm đường đi, nó cũng có thể được mô hình hóa và giải quyết như một Bài toán Thỏa mãn Ràng buộc (CSP). Trong cách tiếp cận này, các thành phần chính bao gồm:
+#### 2.6.1. Mô hình hóa 8-Puzzle như một CSP và cách tiếp cận của các thuật toán
+Bài toán 8-puzzle có thể được tiếp cận từ góc độ thỏa mãn ràng buộc, mặc dù các thuật toán tìm đường đi truyền thống phổ biến hơn.
 
-* **Biến (Variables):** Có thể có nhiều cách mô hình hóa. Một cách là 9 biến $X_1, ..., X_9$, mỗi biến đại diện cho một ô trên lưới 3x3.
-* **Miền giá trị cho biến (Domains):** Miền giá trị cho mỗi biến $X_i$ là tập các số $\{0, 1, ..., 8\}$.
-* **Ràng buộc (Constraints):**
-    * **Ràng buộc AllDifferent:** Tất cả các biến $X_i$ phải có giá trị khác nhau (mỗi số từ 0 đến 8 chỉ xuất hiện một lần).
-    * **Ràng buộc trạng thái đích (Goal Constraints):** Nếu mục tiêu là tìm một cấu hình trạng thái đích cụ thể, v.v.
-* **Giải pháp (Solution):** Một phép gán giá trị hoàn chỉnh cho tất cả các biến sao cho tất cả các ràng buộc đều được thỏa mãn. Trong trường hợp 8-puzzle, một giải pháp CSP sẽ là một cấu hình bảng hợp lệ.
+* **Cách tiếp cận CSP truyền thống (không phải là trọng tâm chính của các hàm trong code cho 8-puzzle):**
+    * **Biến (Variables):** 9 biến $X_i$ cho mỗi ô trên lưới.
+    * **Miền giá trị (Domains):** $\{0, 1, ..., 8\}$ cho mỗi biến.
+    * **Ràng buộc (Constraints):** Tất cả các biến phải khác nhau (AllDifferent), và các biến phải có giá trị tương ứng với trạng thái đích.
+    * **Giải pháp:** Một phép gán giá trị cho các biến thỏa mãn tất cả ràng buộc.
 
-*Lưu ý:* Đoạn code `constraint_satisfaction` không giải quyết 8-puzzle như một CSP tĩnh để tìm *một* cấu hình. Thay vào đó, nó sử dụng các kỹ thuật CSP (như AC-3 và MRV heuristic) trong một *khuôn khổ tìm kiếm đường đi* để tìm một chuỗi các nước đi.
+* **Cách tiếp cận trong code dự án này:** Các thuật toán trong nhóm này được điều chỉnh để tìm một *đường đi* (chuỗi các trạng thái/nước đi) từ trạng thái ban đầu đến trạng thái đích, đồng thời có thể xem xét các ràng buộc trên đường đi đó hoặc trong quá trình tìm kiếm.
+    * **Backtracking Search:** Tìm kiếm một chuỗi các nước đi hợp lệ.
+    * **Constraint Satisfaction (`constraint_satisfaction` function):** Sử dụng các kỹ thuật như mô phỏng AC-3 và heuristic MRV để hướng dẫn việc chọn nước đi trong quá trình tìm kiếm đường đi.
+    * **Min-Conflicts (`min_conflicts` function):** Đây là một thuật toán tìm kiếm cục bộ, thường dùng cho CSP. Trong bối cảnh này, nó được sử dụng để "sửa chữa" một *đường đi hiện có* (ví dụ, một đường đi tìm được bởi A*).
+        * **"Biến" có thể được coi là:** Các trạng thái tại mỗi vị trí (index) trong đường đi.
+        * **"Giá trị" cho biến này là:** Các trạng thái 8-puzzle lân cận có thể thay thế cho trạng thái hiện tại ở vị trí đó trong đường đi.
+        * **"Xung đột" (Conflicts) cần giảm thiểu bao gồm:**
+            1.  Vi phạm ràng buộc tùy chỉnh `check_2_5_adjacency(state)`: yêu cầu ô số 2 và ô số 5 phải kề nhau trong mỗi trạng thái của đường đi.
+            2.  Các bước chuyển không hợp lệ giữa các trạng thái liên tiếp trong đường đi (ví dụ: trạng thái $S_{i+1}$ không phải là láng giềng của $S_i$).
+            3.  Đường đi không kết thúc ở trạng thái đích.
+        * Thuật toán chọn ngẫu nhiên một trạng thái "xung đột" trong đường đi và cố gắng thay thế nó bằng một trạng thái lân cận (trong không gian các trạng thái 8-puzzle) sao cho tổng số xung đột trên toàn bộ đường đi được giảm thiểu.
 
 #### 2.6.2. Các thuật toán/kỹ thuật triển khai trong nhóm
-* Backtracking Search (Tìm kiếm quay lui) - Triển khai để tìm một chuỗi các nước đi.
-* AC-3 (Arc Consistency Algorithm #3) - Được sử dụng trong hàm `constraint_satisfaction` có vẻ như để "làm sạch" hoặc đánh giá trạng thái, không phải là một solver CSP hoàn chỉnh cho 8-puzzle theo nghĩa truyền thống.
+* Backtracking Search (tìm đường đi có ràng buộc ngầm về tính hợp lệ của nước đi)
+* CSP (hàm `constraint_satisfaction` sử dụng kỹ thuật giống AC-3 và MRV để tìm đường đi)
+* Min-Conflicts (sửa chữa đường đi có sẵn để thỏa mãn các ràng buộc đường đi và ràng buộc tùy chỉnh `check_2_5_adjacency`)
 
 #### 2.6.3. Hình ảnh GIF minh họa hoạt động
 * Backtracking Search (Tìm kiếm quay lui)
   
 ![Backtracking](Gif/Backtracking.gif)
 
-* AC-3 (Arc Consistency Algorithm #3)
+* CSP (sử dụng AC-3 và MRV)
   
 ![AC-3](Gif/ac3.gif)
 
+* Min-Conflicts (sửa chữa đường đi)
+  
 #### 2.6.4. Hình ảnh so sánh hiệu suất của các thuật toán
 
-![image](https://github.com/user-attachments/assets/f7c87a22-21ca-417a-94c1-a2a7b7466288)
+![image](https://github.com/user-attachments/assets/121bff2a-f059-4506-b20c-ec21d43005e5)
 
-#### 2.6.5. Một vài nhận xét về hiệu suất
-* **Backtracking Search (cho tìm đường đi):**
-    * Hàm `backtracking_search`  là một thuật toán tìm kiếm sâu có hệ thống, thử các nước đi và quay lui nếu không dẫn đến đích hoặc vượt quá giới hạn độ sâu.
-    * Việc sử dụng heuristic (Manhattan distance) để sắp xếp thứ tự thử các nước đi (`ORDER-DOMAIN-VALUES`) giúp cải thiện hiệu suất so với backtracking thuần túy.
-    * Hiệu quả phụ thuộc vào chất lượng heuristic và giới hạn độ sâu. Có thể tìm ra giải pháp nhưng không đảm bảo tối ưu về số bước.
+![image](https://github.com/user-attachments/assets/d370b87d-b22f-4250-a588-5adbc8f24f23)
+
+![image](https://github.com/user-attachments/assets/b215f31b-7742-426a-aa53-6ad607aef227)
+
+
+
+* #### 2.6.5. Một vài nhận xét về hiệu suất
+* **Backtracking Search (tìm đường đi):**
+    * Hàm `backtracking_search` trong code là một thuật toán tìm kiếm sâu có hệ thống, thử các nước đi và quay lui.
+    * Việc sử dụng heuristic (Manhattan distance) để sắp xếp thứ tự thử các nước đi (`ORDER-DOMAIN-VALUES`) giúp cải thiện hiệu suất.
+    * Hiệu quả phụ thuộc vào chất lượng heuristic và giới hạn độ sâu.
 * **`constraint_satisfaction` với AC-3 và MRV:**
-    * Hàm `constraint_satisfaction` của bạn sử dụng AC-3 (hàm `revise` và `ac3`) và MRV (Minimum Remaining Values - hàm `mrv_selection`) để hướng dẫn tìm kiếm.
-    * AC-3: Trong ngữ cảnh này, `revise` và `ac3` không rõ ràng lắm về cách chúng áp dụng cho việc tìm đường đi trong 8-puzzle, vì AC-3 thường dùng để lọc miền giá trị của các biến trong CSP tĩnh. Có thể nó được dùng để kiểm tra tính nhất quán cục bộ nào đó.
-    * MRV: Việc chọn nước đi (variable) dẫn đến trạng thái có "ít lựa chọn tốt tiếp theo nhất" (hoặc gần đích nhất theo heuristic) là một chiến lược tốt.
-    * Thuật toán này có vẻ là một dạng tìm kiếm cục bộ hoặc tìm kiếm có hướng dẫn heuristic, kết hợp A\* khi gần bế tắc. Hiệu suất sẽ phụ thuộc vào sự cân bằng của các thành phần này.
+    * Hàm này sử dụng các kỹ thuật CSP để hướng dẫn tìm kiếm đường đi. AC-3 (mô phỏng) có thể dùng để kiểm tra tính nhất quán cục bộ, và MRV giúp chọn nước đi "khó khăn" nhất hoặc hứa hẹn nhất.
+    * Là một dạng tìm kiếm có hướng dẫn heuristic, có thể kết hợp A\* khi gần bế tắc.
+* **Min-Conflicts (sửa đường đi):**
+    * Hoạt động như một thuật toán tìm kiếm cục bộ hiệu quả để tối ưu hóa một giải pháp hiện có bằng cách giảm thiểu số lượng vi phạm ràng buộc.
+    * Trong ngữ cảnh sửa đường đi 8-puzzle:
+        * Bắt đầu với một đường đi ban đầu (ví dụ, từ A*).
+        * Hiệu quả phụ thuộc mạnh vào chất lượng của đường đi ban đầu này. Nếu đường đi ban đầu quá xa giải pháp tốt hoặc có quá nhiều xung đột khó giải quyết, Min-Conflicts có thể không thành công hoặc mất nhiều thời gian.
+        * Ràng buộc tùy chỉnh `check_2_5_adjacency` là một yếu tố làm tăng độ phức tạp và có thể khiến việc tìm một đường đi hoàn toàn không xung đột trở nên khó khăn hơn.
+        * Việc chọn ngẫu nhiên biến xung đột để sửa giúp thuật toán có khả năng thoát khỏi một số điểm tối ưu cục bộ.
+        * Thích hợp cho việc "tinh chỉnh" một giải pháp gần đúng hoặc một giải pháp đã có nhưng vi phạm một số ràng buộc cụ thể, hơn là tìm giải pháp từ đầu trong không gian đường đi phức tạp.
 
 ### 2.7. Học tăng cường (Reinforcement Learning)
 
