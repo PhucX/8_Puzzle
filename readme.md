@@ -393,14 +393,7 @@ Nhìn chung, dự án không chỉ giải quyết được bài toán 8-puzzle m
 
 **Cách sử dụng (Hướng dẫn cơ bản):**
 1.  Đảm bảo bạn đã cài đặt Python và các thư viện cần thiết: `pygame`, `tkinter`.
-    ```bash
-    pip install pygame
-    ```
-2.  Chạy file mã nguồn chính (ví dụ: `main.py` hoặc tên file tương tự của bạn).
-    ```bash
-    python main.py
-    ```
-3.  Sử dụng giao diện để:
+2.  Sử dụng giao diện để:
     * Chọn một thuật toán từ danh sách.
     * Chọn tốc độ mô phỏng (Chậm, Thường, Nhanh).
     * Nhấn nút "Chạy" để bắt đầu giải.
