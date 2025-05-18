@@ -56,7 +56,12 @@ Bài toán 8-puzzle, khi được tiếp cận bằng các thuật toán tìm ki
 ![IDFS](Gif/idfs.gif)
 
 #### 2.2.3. Hình ảnh so sánh hiệu suất của các thuật toán
-* #### 2.2.4. Một vài nhận xét về hiệu suất
+
+![Screenshot 2025-05-18 110215](https://github.com/user-attachments/assets/ab65da9f-96ea-4d99-88b4-20cd33cffdb8)
+
+![Screenshot 2025-05-18 110314](https://github.com/user-attachments/assets/304355a4-316c-4099-be37-3c9ff1260c84)
+
+#### 2.2.4. Một vài nhận xét về hiệu suất
 * **BFS:**
     * Luôn tìm ra giải pháp có số bước ít nhất (tối ưu về số bước) vì nó duyệt các nút theo từng mức độ sâu.
     * Đầy đủ (chắc chắn tìm thấy giải pháp nếu tồn tại).
@@ -110,7 +115,11 @@ Việc sử dụng heuristic giúp các thuật toán này "thông minh" hơn tr
 ![IDA*](Gif/IDA_start.gif)
 
 #### 2.3.4. Hình ảnh so sánh hiệu suất của các thuật toán
-*
+
+![Screenshot 2025-05-18 110430](https://github.com/user-attachments/assets/a8d1bf8c-6bd8-44dc-bbd7-ec1c2d8168d9)
+
+![image](https://github.com/user-attachments/assets/a4d8208b-bdca-48dd-a98a-b62969bbd239)
+
 #### 2.3.5. Một vài nhận xét về hiệu suất
 * **Greedy Search:**
     * Mở rộng nút có vẻ gần đích nhất theo heuristic $h(n)$.
@@ -178,7 +187,15 @@ Các thuật toán tìm kiếm cục bộ hoạt động theo một cách khác 
 ![Beam](Gif/Beam.gif)
 
 #### 2.4.4. Hình ảnh so sánh hiệu suất của các thuật toán
-* #### 2.4.5. Một vài nhận xét về hiệu suất
+
+![image](https://github.com/user-attachments/assets/2cfbd591-e58e-432a-997c-3fc95d78152b)
+
+![image](https://github.com/user-attachments/assets/978c0c05-23c6-4902-909e-d5f2cc4e30a6)
+
+![image](https://github.com/user-attachments/assets/4ece2f2c-7e32-4fbf-9f56-af708c97333c)
+
+
+#### 2.4.5. Một vài nhận xét về hiệu suất
 * **Hill Climbing (các biến thể):**
     * Ưu điểm: Đơn giản để triển khai, yêu cầu ít bộ nhớ (chỉ lưu trạng thái hiện tại).
     * Nhược điểm: Dễ bị mắc kẹt ở các cực đại cục bộ (local optima - trạng thái tốt hơn tất cả láng giềng nhưng không phải tốt nhất toàn cục), các vùng bằng phẳng (plateaus - các láng giềng có cùng giá trị đánh giá), hoặc các đỉnh núi giả (ridges).
@@ -228,7 +245,16 @@ Nhóm này bao gồm các thuật toán được thiết kế để giải quy�
 ![Nhìn thấy một phần](Gif/Nhin_Thay_1_Phan.gif)
 
 #### 2.5.4. Hình ảnh so sánh hiệu suất của các thuật toán
-* #### 2.5.5. Một vài nhận xét về hiệu suất
+
+![image](https://github.com/user-attachments/assets/b2462837-9fbe-4f87-9279-ac020c6c63fb)
+
+![image](https://github.com/user-attachments/assets/6e9c04c6-3312-4876-8551-a086502926ee)
+
+![image](https://github.com/user-attachments/assets/c12f2d38-26a8-479f-ac50-81e3f9532d8e)
+
+
+
+#### 2.5.5. Một vài nhận xét về hiệu suất
 * **AND-OR Search:**
     * Trong code của bạn, `and_or_search` có vẻ như một dạng tìm kiếm đệ quy có giới hạn độ sâu và sử dụng memoization. Việc nó có thực sự mô hình hóa 8-puzzle thành cấu trúc AND-OR điển hình hay không cần xem xét kỹ hơn. Nếu áp dụng đúng, nó hiệu quả cho các bài toán có cấu trúc phân rã tự nhiên.
 * **Trust-Based Search:**
@@ -268,7 +294,10 @@ Mặc dù bài toán 8-puzzle thường được giải bằng các thuật toá
 ![AC-3](Gif/ac3.gif)
 
 #### 2.6.4. Hình ảnh so sánh hiệu suất của các thuật toán
-* #### 2.6.5. Một vài nhận xét về hiệu suất
+
+![image](https://github.com/user-attachments/assets/f7c87a22-21ca-417a-94c1-a2a7b7466288)
+
+#### 2.6.5. Một vài nhận xét về hiệu suất
 * **Backtracking Search (cho tìm đường đi):**
     * Hàm `backtracking_search`  là một thuật toán tìm kiếm sâu có hệ thống, thử các nước đi và quay lui nếu không dẫn đến đích hoặc vượt quá giới hạn độ sâu.
     * Việc sử dụng heuristic (Manhattan distance) để sắp xếp thứ tự thử các nước đi (`ORDER-DOMAIN-VALUES`) giúp cải thiện hiệu suất so với backtracking thuần túy.
@@ -303,7 +332,12 @@ Trong cách tiếp cận Học tăng cường (RL), bài toán 8-puzzle được
 ![Q-learning](Gif/Q_learning.gif)
 
 #### 2.7.4. Hình ảnh so sánh hiệu suất của các thuật toán
-* * #### 2.7.5. Một vài nhận xét về hiệu suất
+
+![image](https://github.com/user-attachments/assets/76cf5c10-30ce-406e-b579-b0c2d2d6a7d8)
+
+![image](https://github.com/user-attachments/assets/b84bc148-0535-4b33-b671-29eab33c848c)
+
+#### 2.7.5. Một vài nhận xét về hiệu suất
 * **Q-Learning:**
     * Là một thuật toán học tăng cường không dựa trên mô hình (model-free), off-policy. Nó học một hàm giá trị hành động (Q-value, $Q(S,A)$ ) để ước lượng "chất lượng" (tổng phần thưởng kỳ vọng trong tương lai) của việc thực hiện hành động $A$ trong trạng thái $S$ và sau đó tuân theo chính sách tối ưu.
     * **Giai đoạn huấn luyện:**
