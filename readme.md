@@ -304,6 +304,8 @@ Bài toán 8-puzzle có thể được tiếp cận từ góc độ thỏa mãn 
 ![AC-3](Gif/ac3.gif)
 
 * Min-Conflicts (sửa chữa đường đi)
+
+![Minconflicts](Gif/minconlicts.gif)
   
 #### 2.6.4. Hình ảnh so sánh hiệu suất của các thuật toán
 
