@@ -39,7 +39,14 @@ Bài toán 8-puzzle, khi được tiếp cận bằng các thuật toán tìm ki
 * Iterative Deepening DFS (IDDFS) - Tìm kiếm lặp sâu dần
 
 #### 2.2.2. Hình ảnh GIF minh họa hoạt động
-* * * * #### 2.2.3. Hình ảnh so sánh hiệu suất của các thuật toán
+* BFS
+
+* UCS
+![Dfs](https://github.com/user-attachments/assets/90318faa-440c-4792-b843-929c561321fa)
+* DFS
+
+* IDFS
+#### 2.2.3. Hình ảnh so sánh hiệu suất của các thuật toán
 * #### 2.2.4. Một vài nhận xét về hiệu suất
 * **BFS:**
     * Luôn tìm ra giải pháp có số bước ít nhất (tối ưu về số bước) vì nó duyệt các nút theo từng mức độ sâu.
