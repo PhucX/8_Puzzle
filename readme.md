@@ -12,12 +12,6 @@ Dự án này được xây dựng nhằm các mục tiêu chính sau:
 ## 2. Nội dung
 
 ### 2.1. Tổng quan về Bài toán Tìm kiếm và Giải pháp
-(Mục này sẽ được trình bày chi tiết trong phần 2.2.1 dưới đây khi nói về nhóm thuật toán đầu tiên. Các nhóm sau sẽ tập trung vào đặc điểm riêng của mình dựa trên nền tảng chung này.)
-
-### 2.2. Các thuật toán Tìm kiếm không có thông tin (Uninformed Search)
-
-#### 2.2.1. Các thành phần chính của bài toán tìm kiếm 8-Puzzle và khái niệm giải pháp
-
 Bài toán 8-puzzle, khi được tiếp cận bằng các thuật toán tìm kiếm, bao gồm các thành phần cơ bản sau:
 
 * **Không gian trạng thái (State Space):** Là tập hợp tất cả các cấu hình (sắp xếp) có thể của 9 ô (8 ô số và 1 ô trống) trên lưới 3x3. Mỗi cấu hình là một trạng thái. Với 9 ô, có tổng cộng 9! = 362,880 hoán vị. Tuy nhiên, chỉ một nửa trong số này có thể giải được từ một trạng thái ban đầu cụ thể.
@@ -34,17 +28,19 @@ Bài toán 8-puzzle, khi được tiếp cận bằng các thuật toán tìm ki
 * **Giải pháp (Solution):** Là một chuỗi các hành động (hoặc chuỗi các trạng thái tương ứng) dẫn từ trạng thái ban đầu đến trạng thái đích.
 * **Giải pháp tối ưu (Optimal Solution):** Là giải pháp có chi phí đường đi nhỏ nhất. Đối với 8-puzzle với chi phí bước là 1, đây là giải pháp có số bước di chuyển ít nhất.
 
-Nhóm thuật toán Tìm kiếm không có thông tin thực hiện tìm kiếm dựa trên các thành phần này mà không sử dụng thêm bất kỳ kiến thức nào về "mức độ gần" của một trạng thái tới trạng thái đích.
 
-#### 2.2.2. Các thuật toán triển khai trong nhóm
+
+### 2.2. Các thuật toán Tìm kiếm không có thông tin (Uninformed Search)
+
+#### 2.2.1. Các thuật toán triển khai trong nhóm
 * Breadth-First Search (BFS) - Tìm kiếm theo chiều rộng
 * Depth-First Search (DFS) - Tìm kiếm theo chiều sâu
 * Uniform Cost Search (UCS) - Tìm kiếm chi phí thống nhất
 * Iterative Deepening DFS (IDDFS) - Tìm kiếm lặp sâu dần
 
-#### 2.2.3. Hình ảnh GIF minh họa hoạt động
-* * * * #### 2.2.4. Hình ảnh so sánh hiệu suất của các thuật toán
-* #### 2.2.5. Một vài nhận xét về hiệu suất
+#### 2.2.2. Hình ảnh GIF minh họa hoạt động
+* * * * #### 2.2.3. Hình ảnh so sánh hiệu suất của các thuật toán
+* #### 2.2.4. Một vài nhận xét về hiệu suất
 * **BFS:**
     * Luôn tìm ra giải pháp có số bước ít nhất (tối ưu về số bước) vì nó duyệt các nút theo từng mức độ sâu.
     * Đầy đủ (chắc chắn tìm thấy giải pháp nếu tồn tại).
