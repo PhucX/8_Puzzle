@@ -1065,6 +1065,204 @@ def constraint_satisfaction(initial, goal, max_steps=50):
                 return path + remaining_path, 0
 
     return (path if current_state == goal else None), 0
+def min_conflicts(initial, goal, max_steps=5000):
+    def check_2_5_adjacency(state):
+        # Check if tiles 2 and 5 are adjacent (horizontally or vertically)
+        pos_2 = None
+        pos_5 = None
+        for i in range(3):
+            for j in range(3):
+                if state[i][j] == 2:
+                    pos_2 = (i, j)
+                if state[i][j] == 5:
+                    pos_5 = (i, j)
+        if pos_2 and pos_5:
+            return abs(pos_2[0] - pos_5[0]) + abs(pos_2[1] - pos_5[1]) == 1
+        return False
+
+    def count_conflicts(path):
+        conflicts = 0
+        for state in path:
+            if not check_2_5_adjacency(state):
+                conflicts += 1
+        for i in range(len(path) - 1):
+            current_state = path[i]
+            next_state = path[i + 1]
+            if state_to_tuple(next_state) not in [state_to_tuple(n) for n in get_next_states(current_state)]:
+                conflicts += 1
+        return conflicts
+
+    # Validate initial and goal states
+    if not is_solvable(initial):
+        return None, 0
+    
+    # Generate initial path using A*
+    initial_path, expanded_a_star = a_star(initial, goal)
+    if not initial_path:
+        return None, 0
+
+    # Convert moves to states
+    current_path = [deepcopy(initial)]
+    current_state = deepcopy(initial)
+    for move in initial_path:
+        blank_x, blank_y = find_blank(current_state)
+        current_state[blank_x][blank_y], current_state[move[0]][move[1]] = \
+            current_state[move[0]][move[1]], current_state[blank_x][blank_y]
+        current_path.append(deepcopy(current_state))
+
+    expanded = expanded_a_star
+    best_path = deepcopy(current_path)
+    best_conflicts = count_conflicts(current_path)
+    no_progress_steps = 0
+    max_no_progress = 200  # Giảm ngưỡng khởi động lại
+    min_conflicts_seen = best_conflicts
+    restarts = 0
+    max_restarts = 3
+
+    for step in range(max_steps):
+        # Check for quit event periodically
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                return None, expanded
+
+        num_conflicts = count_conflicts(current_path)
+        if num_conflicts == 0 and current_path[-1] == goal:
+            return states_to_moves(current_path), expanded
+
+        # Identify conflicted indices
+        conflicted_indices = []
+        for i, state in enumerate(current_path):
+            if not check_2_5_adjacency(state):
+                conflicted_indices.append(i)
+        for i in range(len(current_path) - 1):
+            current_state = current_path[i]
+            next_state = current_path[i + 1]
+            if state_to_tuple(next_state) not in [state_to_tuple(n) for n in get_next_states(current_state)]:
+                if i not in conflicted_indices:
+                    conflicted_indices.append(i)
+                if i + 1 not in conflicted_indices:
+                    conflicted_indices.append(i + 1)
+
+        # If no conflicts but not at goal, extend path
+        if not conflicted_indices:
+            if current_path[-1] != goal:
+                last_state = current_path[-1]
+                neighbors = get_next_states(last_state)
+                neighbors.sort(key=lambda s: manhattan_distance(s, goal))
+                if manhattan_distance(neighbors[0], goal) < manhattan_distance(last_state, goal):
+                    current_path.append(neighbors[0])
+                    expanded += 1
+                    continue
+            break
+
+        # Randomly select a conflicted index to fix
+        var_index_to_fix = random.choice(conflicted_indices)
+        state_to_fix = current_path[var_index_to_fix]
+        best_alternative_state = state_to_fix
+        min_conflicts_value = num_conflicts
+
+        # Try all valid neighbors of the state to fix
+        potential_alternatives = get_next_states(state_to_fix)
+        random.shuffle(potential_alternatives)
+
+        for alt_state in potential_alternatives:
+            original_state = deepcopy(current_path[var_index_to_fix])
+            current_path[var_index_to_fix] = alt_state
+            conflicts_with_alt = count_conflicts(current_path)
+            if conflicts_with_alt < min_conflicts_value:
+                min_conflicts_value = conflicts_with_alt
+                best_alternative_state = alt_state
+            current_path[var_index_to_fix] = original_state
+            expanded += 1
+
+        # Nếu không tìm được cải thiện, thử sử dụng A* để tìm đoạn đường ngắn
+        if min_conflicts_value == num_conflicts and var_index_to_fix < len(current_path) - 1:
+            next_target = current_path[var_index_to_fix + 1]
+            a_star_path, a_star_expanded = a_star(state_to_fix, next_target)
+            expanded += a_star_expanded
+            if a_star_path and len(a_star_path) <= 3:  # Giới hạn độ dài đường đi
+                temp_state = deepcopy(state_to_fix)
+                for move in a_star_path:
+                    blank_x, blank_y = find_blank(temp_state)
+                    temp_state[blank_x][blank_y], temp_state[move[0]][move[1]] = \
+                        temp_state[move[0]][move[1]], temp_state[blank_x][blank_y]
+                    if check_2_5_adjacency(temp_state):
+                        best_alternative_state = deepcopy(temp_state)
+                        break
+
+        current_path[var_index_to_fix] = best_alternative_state
+
+        # Update best path if improved
+        if min_conflicts_value < best_conflicts:
+            best_conflicts = min_conflicts_value
+            best_path = deepcopy(current_path)
+            no_progress_steps = 0
+            min_conflicts_seen = min(min_conflicts_seen, min_conflicts_value)
+        else:
+            no_progress_steps += 1
+
+        # Khởi động lại nếu không có tiến bộ
+        if no_progress_steps >= max_no_progress:
+            # Trước khi khởi động lại, hãy thử hoàn thiện đường đi tốt nhất hiện tại
+            if best_path[-1] != goal and best_conflicts < num_conflicts * 0.7:
+                sub_path, sub_expanded = a_star(best_path[-1], goal)
+                expanded += sub_expanded
+                if sub_path:
+                    temp_best_path = deepcopy(best_path)
+                    temp_state = deepcopy(best_path[-1])
+                    for move in sub_path:
+                        blank_x, blank_y = find_blank(temp_state) 
+                        temp_state[blank_x][blank_y], temp_state[move[0]][move[1]] = \
+                            temp_state[move[0]][move[1]], temp_state[blank_x][blank_y]
+                        temp_best_path.append(deepcopy(temp_state))
+                    
+                    if count_conflicts(temp_best_path) < best_conflicts:
+                        best_path = temp_best_path
+                        best_conflicts = count_conflicts(best_path)
+                        
+                        # Nếu đã tìm được đường đi không có xung đột
+                        if best_conflicts == 0 and best_path[-1] == goal:
+                            return states_to_moves(best_path), expanded
+            
+            # Tăng số lần khởi động lại và kiểm tra
+            restarts += 1
+            if restarts >= max_restarts:
+                # Đã thử nhiều lần, trả về kết quả tốt nhất nếu có thể
+                if best_conflicts == 0 and best_path[-1] == goal:
+                    return states_to_moves(best_path), expanded
+                break
+                
+            # Khởi động lại với đường đi ngắn hơn
+            current_path = [deepcopy(initial)]
+            current_state = deepcopy(initial)
+            
+            # Thêm đa dạng bằng cách thực hiện một số bước ngẫu nhiên
+            for _ in range(5):
+                neighbors = get_next_states(current_state)
+                if not neighbors:
+                    break
+                next_state = random.choice(neighbors)
+                blank_x, blank_y = find_blank(current_state)
+                for next_x, next_y in [(x,y) for x in range(3) for y in range(3) if next_state[x][y] == 0]:
+                    current_state[blank_x][blank_y], current_state[next_x][next_y] = \
+                        current_state[next_x][next_y], current_state[blank_x][blank_y]
+                    current_path.append(deepcopy(current_state))
+                    break
+                    
+            no_progress_steps = 0
+
+    # Nếu kết thúc vòng lặp mà không tìm được giải pháp, trả về đường đi tốt nhất nếu có thể
+    if best_conflicts == 0 and best_path[-1] == goal:
+        return states_to_moves(best_path), expanded
+    
+    # Thử một nỗ lực cuối cùng với A* từ trạng thái cuối cùng
+    if best_path[-1] != goal:
+        sub_path, sub_expanded = a_star(best_path[-1], goal)
+        expanded += sub_expanded
+        if sub_path:
+            return states_to_moves(best_path) + sub_path, expanded
+    
+    return None, expanded
 
 def trust_based_search(initial, goal, max_expanded=200000):
     def calculate_trust_score(state, heuristic, visited_states):
@@ -1554,7 +1752,7 @@ def trust_based_search_partial(initial, goal, screen, states_history):
         pygame.quit()
         return solution, expanded
     
-    pygame.quit()
+    
     return None, expanded
 def draw_state(screen, state, offset_x, offset_y, tile_size=120):
     font_size = tile_size // 3
@@ -1807,6 +2005,7 @@ def draw_interface(screen, state, goal, selected_algorithm, speed, steps=0, algo
     font = pygame.font.Font(None, font_size)
     small_font_size = max(18, min(24, int(font_size * 0.75)))
     small_font = pygame.font.Font(None, small_font_size)
+    group_font = pygame.font.Font(None, int(font_size * 0.9))  # Font cho tiêu đề nhóm
     
     title_text = font.render("THUAT TOAN & CHUC NANG", True, TITLE_COLOR)
     title_rect = title_text.get_rect(center=(current_width // 2, algo_panel_y + 25))
@@ -1819,33 +2018,74 @@ def draw_interface(screen, state, goal, selected_algorithm, speed, steps=0, algo
     left_panel_width = min(algo_panel_width * 0.6, algo_panel_width - 250)
     right_panel_width = algo_panel_width - left_panel_width - margin
     
-    # Danh sách các thuật toán và màu sắc tương ứng
-    algorithms = [
-        ("BFS", BLUE), 
-        ("DFS", BLUE), 
-        ("UCS", BLUE),
-        ("IDDFS", BLUE),
-        ("Backtracking", BLUE),
-        ("CSP", BLUE),
-        ("Greedy", GREEN), 
-        ("A*", GREEN), 
-        ("IDA*", GREEN),
-        ("Beam Search", GREEN),
-        ("AND-OR", GREEN),
-        ("Simple Hill", RED), 
-        ("Steepest Hill", RED), 
-        ("Stochastic Hill", RED),
-        ("Simulated Annealing", RED),
-        ("Genetic Algorithm", PURPLE),
-        ("Trust-Based", PURPLE),
-        ("Trust-Partial", PURPLE),
-        ("Q-Learning", PURPLE)
+    # Danh sách các nhóm thuật toán và màu sắc tương ứng
+    algorithm_groups = [
+        {
+            "name": "Uninformed Search",
+            "color": BLUE,  # (70, 130, 230)
+            "algorithms": [
+                ("BFS", BLUE),
+                ("DFS", BLUE),
+                ("UCS", BLUE),
+                ("IDDFS", BLUE)
+            ]
+        },
+        {
+            "name": "Informed Search",
+            "color": GREEN,  # (60, 180, 75)
+            "algorithms": [
+                ("Greedy", GREEN),
+                ("A*", GREEN),
+                ("IDA*", GREEN),
+                ("Beam Search", GREEN)
+            ]
+        },
+        {
+            "name": "Local Search",
+            "color": RED,  # (220, 60, 60)
+            "algorithms": [
+                ("Simple Hill", RED),
+                ("Steepest Hill", RED),
+                ("Stochastic Hill", RED),
+                ("Simulated Annealing", RED),
+                ("Genetic Algorithm", RED)
+            ]
+        },
+        {
+            "name": "Complex Environment Search",
+            "color": PURPLE,  # (180, 110, 200)
+            "algorithms": [
+                ("AND-OR", PURPLE),
+                ("Trust-Based", PURPLE),
+                ("Trust-Partial", PURPLE)
+            ]
+        },
+        {
+            "name": "Constraint-Based Search",
+            "color": (255, 165, 0),  # ORANGE
+            "algorithms": [
+                ("Backtracking", (255, 165, 0)),
+                ("CSP", (255, 165, 0)),
+                ("Min-Conflicts", (255, 165, 0))
+            ]
+        },
+        {
+            "name": "Reinforcement Learning",
+            "color": YELLOW,  # (240, 190, 40)
+            "algorithms": [
+                ("Q-Learning", YELLOW)
+            ]
+        }
     ]
     
-    algo_count = len(algorithms)
+    btn_all_algorithms = []
+    current_y = algo_panel_y + 60
+    
+    # Tính số cột tối ưu dựa trên số thuật toán
+    max_algorithms = max(len(group["algorithms"]) for group in algorithm_groups)
     best_columns = 5
     for cols in range(5, 2, -1):
-        rows = (algo_count + cols - 1) // cols
+        rows = (max_algorithms + cols - 1) // cols
         btn_width = (left_panel_width - (cols + 1) * btn_margin_x) / cols
         if btn_width >= 80:
             best_columns = cols
@@ -1854,15 +2094,31 @@ def draw_interface(screen, state, goal, selected_algorithm, speed, steps=0, algo
     algo_columns = best_columns
     btn_width = (left_panel_width - (algo_columns + 1) * btn_margin_x) / algo_columns
     
-    btn_all_algorithms = []
-    for idx, (algo_name, algo_color) in enumerate(algorithms):
-        row = idx // algo_columns
-        col = idx % algo_columns
-        btn_x = margin + btn_margin_x + col * (btn_width + btn_margin_x)
-        btn_y = algo_panel_y + 60 + row * (btn_height + btn_margin_y)
-        btn_all_algorithms.append((algo_name, btn_x, btn_y, btn_width, btn_height))
-        # Truyền đúng tham số cho hàm draw_buttons
-        draw_buttons(screen, btn_x, btn_y, btn_width, btn_height, algo_name, algo_color, selected_algorithm == algo_name)
+    for group in algorithm_groups:
+        # Vẽ tiêu đề nhóm
+        group_title = group_font.render(group["name"], True, group["color"])
+        screen.blit(group_title, (margin + btn_margin_x, current_y))
+        current_y += group_title.get_height()  # Giảm khoảng cách sau tiêu đề
+        
+        # Vẽ các nút thuật toán trong nhóm, sát với tiêu đề
+        for idx, (algo_name, algo_color) in enumerate(group["algorithms"]):
+            row = idx // algo_columns
+            col = idx % algo_columns
+            btn_x = margin + btn_margin_x + col * (btn_width + btn_margin_x)
+            btn_y = current_y + row * (btn_height + btn_margin_y * 0.5)  # Giảm khoảng cách giữa các nút
+            btn_all_algorithms.append((algo_name, btn_x, btn_y, btn_width, btn_height))
+            draw_buttons(screen, btn_x, btn_y, btn_width, btn_height, algo_name, algo_color, selected_algorithm == algo_name)
+        
+        # Cập nhật y cho nhóm tiếp theo
+        rows = (len(group["algorithms"]) + algo_columns - 1) // algo_columns
+        current_y += rows * (btn_height + btn_margin_y * 0.5) + btn_margin_y  # Giảm tổng khoảng cách
+    
+    # Đảm bảo panel đủ cao
+    total_height_needed = current_y - algo_panel_y + margin * 2
+    if total_height_needed > algo_panel_height:
+        algo_panel_height = total_height_needed
+        pygame.draw.rect(screen, PANEL_BLUE, (margin, algo_panel_y, algo_panel_width, algo_panel_height), border_radius=10)
+        pygame.draw.rect(screen, BLACK, (margin, algo_panel_y, algo_panel_width, algo_panel_height), 2, border_radius=10)
     
     control_panel_x = margin + left_panel_width + margin
     
@@ -2154,6 +2410,7 @@ def main():
                                     "IDDFS": iddfs,
                                     "Backtracking": backtracking_search,
                                     "CSP": constraint_satisfaction,
+                                    "Min-Conflicts": min_conflicts,
                                     "Greedy": greedy_search, 
                                     "A*": a_star, 
                                     "IDA*": ida_star,
