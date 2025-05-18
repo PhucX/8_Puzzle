@@ -40,13 +40,13 @@ Bài toán 8-puzzle, khi được tiếp cận bằng các thuật toán tìm ki
 
 #### 2.2.2. Hình ảnh GIF minh họa hoạt động
 * BFS
-
+![BFS](Gif/Bfs.gif)
 * UCS
-
+![UCS](Gif/Ucs.gif)
 * DFS
-
-
+![DFS](Gif/Dfs.gif)
 * IDFS
+![IDFS](Gif/idfs.gif)
 #### 2.2.3. Hình ảnh so sánh hiệu suất của các thuật toán
 * #### 2.2.4. Một vài nhận xét về hiệu suất
 * **BFS:**
@@ -89,8 +89,15 @@ Việc sử dụng heuristic giúp các thuật toán này "thông minh" hơn tr
 * Iterative Deepening A\* (IDA\*) - Phiên bản lặp sâu của A\*, sử dụng ngưỡng $f-cost$.
 
 #### 2.3.3. Hình ảnh GIF minh họa hoạt động
-* * * #### 2.3.4. Hình ảnh so sánh hiệu suất của các thuật toán
-* #### 2.3.5. Một vài nhận xét về hiệu suất
+* Greedy Search (Tìm kiếm tham lam)
+![Greedy](Gif/Greedy.gif)
+* A\*
+![A*](Gif/a_start.gif)
+* Iterative Deepening A\* (IDA\*)
+![IDA*](Gif/IDA_start.gif)
+#### 2.3.4. Hình ảnh so sánh hiệu suất của các thuật toán
+*
+#### 2.3.5. Một vài nhận xét về hiệu suất
 * **Greedy Search:**
     * Mở rộng nút có vẻ gần đích nhất theo heuristic $h(n)$.
     * Thường tìm ra giải pháp rất nhanh (nếu tìm được) nhưng không đảm bảo tối ưu.
@@ -132,7 +139,19 @@ Các thuật toán tìm kiếm cục bộ hoạt động theo một cách khác 
 * Beam Search (Tìm kiếm chùm tia)
 
 #### 2.4.3. Hình ảnh GIF minh họa hoạt động
-* * * * * * #### 2.4.4. Hình ảnh so sánh hiệu suất của các thuật toán
+* Simple Hill Climbing (Leo đồi đơn giản)
+![Leo đồi đơn giản](Gif/Leo_Doi_Don_Gian.gif)
+* Steepest-Ascent Hill Climbing (Leo đồi dốc nhất)
+![Leo đồi](Gif/leo_doi.gif)
+* Stochastic Hill Climbing (Leo đồi ngẫu nhiên)
+![Leo đồi ngẫu nhiên](Gif/leo_doi_Ngau_Nhien.gif)
+* Simulated Annealing (Luyện mô phỏng / Ủ tôi)
+![SA](Gif/SA.gif)
+* Genetic Algorithms (Thuật toán di truyền)
+![Di truyền](Gif/Di_Truyền.gif)
+* Beam Search (Tìm kiếm chùm tia)
+![Beam](Gif/Beam.gif)
+#### 2.4.4. Hình ảnh so sánh hiệu suất của các thuật toán
 * #### 2.4.5. Một vài nhận xét về hiệu suất
 * **Hill Climbing (các biến thể):**
     * Ưu điểm: Đơn giản để triển khai, yêu cầu ít bộ nhớ (chỉ lưu trạng thái hiện tại).
@@ -170,7 +189,13 @@ Nhóm này bao gồm các thuật toán được thiết kế để giải quy�
 * Trust-Based Partial Search (Tìm kiếm dựa trên niềm tin, tập trung vào mục tiêu con)
 
 #### 2.5.3. Hình ảnh GIF minh họa hoạt động
-* * * #### 2.5.4. Hình ảnh so sánh hiệu suất của các thuật toán
+* AND-OR Search (Tìm kiếm trên cây AND-OR)
+![AND/OR](Gif/And_or.gif)
+* Trust-Based Search (Tìm kiếm dựa trên niềm tin)
+![Niềm tin](Gif/Niem_Tin.gif)
+* Trust-Based Partial Search (Tìm kiếm dựa trên niềm tin, tập trung vào mục tiêu con)
+![Nhìn thấy một phần](Gif/Nhin_Thay_1_Phan.gif)
+#### 2.5.4. Hình ảnh so sánh hiệu suất của các thuật toán
 * #### 2.5.5. Một vài nhận xét về hiệu suất
 * **AND-OR Search:**
     * Trong code của bạn, `and_or_search` có vẻ như một dạng tìm kiếm đệ quy có giới hạn độ sâu và sử dụng memoization. Việc nó có thực sự mô hình hóa 8-puzzle thành cấu trúc AND-OR điển hình hay không cần xem xét kỹ hơn. Nếu áp dụng đúng, nó hiệu quả cho các bài toán có cấu trúc phân rã tự nhiên.
@@ -202,7 +227,11 @@ Mặc dù bài toán 8-puzzle thường được giải bằng các thuật toá
 * AC-3 (Arc Consistency Algorithm #3) - Được sử dụng trong hàm `constraint_satisfaction` có vẻ như để "làm sạch" hoặc đánh giá trạng thái, không phải là một solver CSP hoàn chỉnh cho 8-puzzle theo nghĩa truyền thống.
 
 #### 2.6.3. Hình ảnh GIF minh họa hoạt động
-* * #### 2.6.4. Hình ảnh so sánh hiệu suất của các thuật toán
+* Backtracking Search (Tìm kiếm quay lui)
+![Backtracking](Gif/Backtracking.gif)
+* AC-3 (Arc Consistency Algorithm #3)
+![AC-3](Gif/ac3.gif)
+#### 2.6.4. Hình ảnh so sánh hiệu suất của các thuật toán
 * #### 2.6.5. Một vài nhận xét về hiệu suất
 * **Backtracking Search (cho tìm đường đi):**
     * Hàm `backtracking_search` trong code của bạn là một thuật toán tìm kiếm sâu có hệ thống, thử các nước đi và quay lui nếu không dẫn đến đích hoặc vượt quá giới hạn độ sâu.
@@ -233,7 +262,9 @@ Trong cách tiếp cận Học tăng cường (RL), bài toán 8-puzzle được
 * Q-Learning
 
 #### 2.7.3. Hình ảnh GIF minh họa hoạt động
-* * #### 2.7.4. Hình ảnh so sánh hiệu suất của các thuật toán
+* Q-Learning
+![Q-learning](Gif/Q_learning.gif)
+#### 2.7.4. Hình ảnh so sánh hiệu suất của các thuật toán
 * * #### 2.7.5. Một vài nhận xét về hiệu suất
 * **Q-Learning:**
     * Là một thuật toán học tăng cường không dựa trên mô hình (model-free), off-policy. Nó học một hàm giá trị hành động (Q-value, $Q(S,A)$) để ước lượng "chất lượng" (tổng phần thưởng kỳ vọng trong tương lai) của việc thực hiện hành động $A$ trong trạng thái $S$ và sau đó tuân theo chính sách tối ưu.
