@@ -42,8 +42,9 @@ Bài toán 8-puzzle, khi được tiếp cận bằng các thuật toán tìm ki
 * BFS
 
 * UCS
-![Dfs](https://github.com/user-attachments/assets/90318faa-440c-4792-b843-929c561321fa)
+
 * DFS
+
 
 * IDFS
 #### 2.2.3. Hình ảnh so sánh hiệu suất của các thuật toán
